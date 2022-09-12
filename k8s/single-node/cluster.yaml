@@ -1,0 +1,50 @@
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: "one-node"
+spec:
+  defaults:
+    templates:
+      dataVolumeClaimTemplate: data-volume-template
+      podTemplate: pods-with-nvme-ssd
+  configuration:
+    clusters:
+      - name: one-node
+        layout:
+          shardsCount: 1
+          replicasCount: 1
+  templates:
+    volumeClaimTemplates:
+      - name: data-volume-template
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: local-storage
+          resources:
+            requests:
+              storage: 50Gi
+    podTemplates:
+      - name: pods-with-nvme-ssd
+        metadata:
+          annotations:
+            prometheus.io/port: '8888'
+            prometheus.io/scrape: 'true'
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: "disktype"
+                        operator: In
+                        values:
+                          - "nvme-ssd"
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: "clickhouse.altinity.com/app"
+                        operator: In
+                        values:
+                          - "chop"
+                  topologyKey: "kubernetes.io/hostname"
