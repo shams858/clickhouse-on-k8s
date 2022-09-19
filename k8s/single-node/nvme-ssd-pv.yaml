@@ -4,7 +4,7 @@ metadata:
   name: nvme-pv
 spec:
           capacity:
-                 storage: 50Gi
+                 storage: 400Gi
           persistentVolumeReclaimPolicy: Delete
           accessModes:
             - ReadWriteOnce
