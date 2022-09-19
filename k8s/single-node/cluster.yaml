@@ -22,7 +22,7 @@ spec:
           storageClassName: local-storage
           resources:
             requests:
-              storage: 50Gi
+              storage: 400Gi
     podTemplates:
       - name: pods-with-nvme-ssd
         metadata:
