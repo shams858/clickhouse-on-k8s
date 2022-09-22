@@ -1,0 +1,7 @@
+Dataset,Query,Elapsed
+1node,Query1,223
+1node,Query2,3074
+1node,Query3,859
+5nodes,Query1,978
+5nodes,Query2,13718
+5nodes,Query3,4144
